@@ -128,33 +128,6 @@ app.use(notFoundHandler);
 app.use(errorLogger);
 app.use(errorHandler);
 
-app.get('/health', async (req, res) => {
-  const db = await checkDBHealth();
-  
-  // Check Stellar network connectivity
-  let stellar = { online: false };
-  try {
-    const { getNetworkStatus } = await import('./services/stellar.js');
-    stellar = await getNetworkStatus();
-  } catch (err) {
-    logger.warn('health.stellar.check.failed', { error: err.message });
-  }
-  
-  const allHealthy = db.status === 'ok' && stellar.online;
-  const status = allHealthy ? 'ok' : 'degraded';
-  
-  res.status(allHealthy ? 200 : 503).json({
-    status,
-    network: getConfig().stellar.network,
-    db,
-    stellar: {
-      online: stellar.online,
-      network: stellar.network || null,
-      horizonVersion: stellar.horizonVersion || null,
-    },
-  });
-});
-
 const httpServer = createServer(app);
 initWebSocket(httpServer);
 
