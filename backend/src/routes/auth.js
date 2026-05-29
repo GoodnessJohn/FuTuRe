@@ -8,6 +8,7 @@ import { consumePendingCredentials } from '../recovery/recoveryStore.js';
  ci/add-migration-smoke-test
 import prisma from '../db/client.js';
 
+import prisma from '../db/client.js';
 import { createRateLimiter } from '../middleware/rateLimiter.js';
  main
 
